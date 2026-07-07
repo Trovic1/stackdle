@@ -1,0 +1,38 @@
+{
+  "name": "stackdle",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Web3 Wordle on Stacks blockchain",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "next": "^15.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "@stacks/connect": "^8.0.0",
+    "@stacks/transactions": "^7.0.0",
+    "@stacks/network": "^7.0.0",
+    "@stacks/encryption": "^7.0.0",
+    "@noble/secp256k1": "^2.0.0",
+    "@micro-stacks/react": "latest",
+    "@micro-stacks/client": "latest",
+    "micro-stacks": "latest",
+    "tailwindcss": "^3.4.1",
+    "postcss": "^8.4.31",
+    "autoprefixer": "^10.4.16",
+    "framer-motion": "latest",
+    "canvas-confetti": "^1.9.2",
+    "lucide-react": "latest"
+  },
+  "devDependencies": {
+    "@types/canvas-confetti": "^1.6.4",
+    "@types/node": "^20.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "typescript": "^5.0.0"
+  }
+}
