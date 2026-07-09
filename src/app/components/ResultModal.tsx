@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import { GameStatus, Guess } from '../hooks/useWordle';
 import { useStacks } from '../hooks/useStacks';
+import { NETWORK } from '../lib/contract';
 
 interface ResultModalProps {
   status: GameStatus;
@@ -28,7 +29,7 @@ async function generateShareImage(
   const paddingY = 48;
   const headerH = 100;
   const footerH = 50;
-  
+
   const boardW = cols * tileSize + (cols - 1) * gap;
   const boardH = rows * tileSize + (rows - 1) * gap;
   const canvasW = boardW + paddingX * 2;
@@ -39,7 +40,7 @@ async function generateShareImage(
   canvas.height = canvasH * 2;
   const ctx = canvas.getContext('2d')!;
   ctx.scale(2, 2);
-  
+
   const centerX = canvasW / 2;
 
   // --- Background ---
@@ -68,7 +69,7 @@ async function generateShareImage(
   const dleW = ctx.measureText('DLE').width;
   const totalLogoW = stackW + dleW;
   const logoStartX = centerX - totalLogoW / 2;
-  
+
   ctx.textBaseline = 'alphabetic';
   ctx.textAlign = 'left';
   ctx.fillStyle = '#ffffff';
@@ -154,7 +155,7 @@ function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: numbe
 }
 
 export function ResultModal({ status, guesses, solution, gameId, token, onPlayAgain, showToast }: ResultModalProps) {
-  const { stxAddress, claimWin, isRequestPending, txId } = useStacks();
+  const { stxAddress, claimWin, isRequestPending, claimTxId } = useStacks();
   const [isVerifying, setIsVerifying] = useState(false);
   const [claimError, setClaimError] = useState('');
   const [shareImageUrl, setShareImageUrl] = useState<string | null>(null);
@@ -331,13 +332,13 @@ export function ResultModal({ status, guesses, solution, gameId, token, onPlayAg
               {eligibleForPrize && (
                 <button
                   onClick={handleClaim}
-                  disabled={isRequestPending || isVerifying || !!txId || !stxAddress}
+                  disabled={isRequestPending || isVerifying || !!claimTxId || !stxAddress}
                   className="w-full py-3.5 text-white font-bold rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed text-sm"
                   style={{ background: '#FF5500', boxShadow: '0 0 20px rgba(255,85,0,0.3)' }}
                 >
                   {isVerifying ? 'Verifying...' :
                     isRequestPending ? 'Confirming...' :
-                      txId ? '✓ Claim Submitted!' :
+                      claimTxId ? '✓ Claim Submitted!' :
                         !stxAddress ? 'Connect Wallet to Claim' :
                           'Claim Win On-Chain'}
                 </button>
@@ -357,9 +358,9 @@ export function ResultModal({ status, guesses, solution, gameId, token, onPlayAg
             {claimError && (
               <p className="text-red-400 text-xs mt-4 font-medium relative z-10">{claimError}</p>
             )}
-            {txId && (
+            {claimTxId && (
               <div className="mt-4 text-xs relative z-10" style={{ color: 'var(--muted-foreground)' }}>
-                <a href={`https://explorer.hiro.so/txid/${txId}?chain=testnet`} target="_blank" rel="noreferrer" className="hover:underline" style={{ color: '#FF5500' }}>
+                <a href={`https://explorer.hiro.so/txid/${claimTxId}?chain=${NETWORK}`} target="_blank" rel="noreferrer" className="hover:underline" style={{ color: '#FF5500' }}>
                   View on Explorer →
                 </a>
               </div>

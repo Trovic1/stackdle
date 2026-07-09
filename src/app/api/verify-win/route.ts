@@ -31,9 +31,9 @@ export async function POST(request: Request) {
     }
 
     // 4. Generate Cryptographic Signature
-    const privateKey = process.env.SIGNING_PRIVATE_KEY;
+    const privateKey = process.env.BACKEND_PRIVATE_KEY;
     if (!privateKey) {
-      console.error('SIGNING_PRIVATE_KEY not configured on server');
+      console.error('BACKEND_PRIVATE_KEY not configured on server');
       return NextResponse.json({ error: 'Server misconfiguration' }, { status: 500 });
     }
 

@@ -2,15 +2,17 @@ import { useState, useCallback } from 'react';
 import { openContractCall } from '@stacks/connect';
 import { Cl, PostConditionMode } from '@stacks/transactions';
 import { useStacksAuth } from '../context/StacksContext';
-import { CONTRACT_ADDRESS, CONTRACT_NAME } from '../lib/contract';
+import { CONTRACT_ADDRESS, CONTRACT_NAME, NETWORK } from '../lib/contract';
 
 export function useStacks() {
   const { stxAddress } = useStacksAuth();
-  const [txId, setTxId] = useState<string | null>(null);
+  const [entryTxId, setEntryTxId] = useState<string | null>(null);
+  const [claimTxId, setClaimTxId] = useState<string | null>(null);
   const [isPending, setIsPending] = useState(false);
 
   const resetTx = useCallback(() => {
-    setTxId(null);
+    setEntryTxId(null);
+    setClaimTxId(null);
     setIsPending(false);
   }, []);
 
@@ -23,10 +25,10 @@ export function useStacks() {
       contractName: CONTRACT_NAME,
       functionName: 'enter-game',
       functionArgs: [Cl.uint(gameId)],
-      network: 'testnet',
+      network: NETWORK as any,
       postConditionMode: PostConditionMode.Allow,
       onFinish: (data) => {
-        setTxId(data.txId);
+        setEntryTxId(data.txId);
         setIsPending(false);
         if (onFinish) onFinish(data.txId);
       },
@@ -53,10 +55,10 @@ export function useStacks() {
         Cl.buffer(msgHashBuffer),
         Cl.buffer(sigBuffer),
       ],
-      network: 'testnet',
+      network: NETWORK as any,
       postConditionMode: PostConditionMode.Allow,
       onFinish: (data) => {
-        setTxId(data.txId);
+        setClaimTxId(data.txId);
         setIsPending(false);
         if (onFinish) onFinish(data.txId);
       },
@@ -73,6 +75,7 @@ export function useStacks() {
     resetTx,
     stxAddress,
     isRequestPending: isPending,
-    txId,
+    entryTxId,
+    claimTxId,
   };
 }

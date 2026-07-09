@@ -1,5 +1,5 @@
 import { makeSTXTokenTransfer, broadcastTransaction } from '@stacks/transactions';
-import { StacksTestnet } from '@stacks/network';
+import { StacksTestnet, StacksMainnet } from '@stacks/network';
 import { generateSecretKey, generateWallet } from '@stacks/wallet-sdk';
 import fs from 'fs';
 import path from 'path';
@@ -26,13 +26,20 @@ async function fundContract() {
   
   const account = wallet.accounts[0];
   const senderKey = account.stxPrivateKey;
-  const network = new StacksTestnet();
+  const networkStr = envFile.match(/NETWORK=([^\n\r]+)/)?.[1]?.trim() || 'testnet';
+  const network = networkStr === 'mainnet' ? new StacksMainnet() : new StacksTestnet();
   
-  // Replace with the actual deployed contract address on testnet
-  const contractAddress = 'ST2Y4P6KXB5PVE20JNM21Z1F2SMT78PT82JGA3XKY.stackdle-v3'; 
+  // Read address and name from env or calculate it based on mainnet
+  let baseAddress = 'ST2Y4P6KXB5PVE20JNM21Z1F2SMT78PT82JGA3XKY';
+  if (networkStr === 'mainnet') {
+    // Convert to mainnet SP address equivalent
+    baseAddress = 'SP2Y4P6KXB5PVE20JNM21Z1F2SMT78PT82JJFZGF2';
+  }
+  const contractName = envFile.match(/CONTRACT_NAME=([^\n\r]+)/)?.[1]?.trim() || 'stackdle-v3';
+  const contractAddress = `${baseAddress}.${contractName}`;
   const amount = 1000000; // 1 STX (in microSTX)
 
-  console.log(`• Constructing transfer of 1 STX to ${contractAddress}...`);
+  console.log(`• Constructing transfer of 1 STX to ${contractAddress} on ${networkStr}...`);
   
   try {
     const txOptions = {
@@ -51,7 +58,7 @@ async function fundContract() {
     } else {
       console.log(`✅ Successfully broadcast transfer!`);
       console.log(`• TXID: 0x${broadcastResponse.txid}`);
-      console.log(`• View on Explorer: https://explorer.hiro.so/txid/0x${broadcastResponse.txid}?chain=testnet`);
+      console.log(`• View on Explorer: https://explorer.hiro.so/txid/0x${broadcastResponse.txid}?chain=${networkStr}`);
     }
   } catch (error) {
     console.error("❌ Error:", error);

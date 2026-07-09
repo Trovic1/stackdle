@@ -12,7 +12,11 @@ export async function GET() {
     const gameId = Math.floor(Math.random() * 2000000000) + 1;
 
     // 3. Create a stateless token containing the secret word
-    const privateKey = process.env.BACKEND_PRIVATE_KEY || '0000000000000000000000000000000000000000000000000000000000000001';
+    const privateKey = process.env.BACKEND_PRIVATE_KEY;
+  if (!privateKey) {
+    console.error("FATAL: BACKEND_PRIVATE_KEY is not set in Vercel Environment Variables!");
+    return NextResponse.json({ error: 'Backend configuration error: Private key missing' }, { status: 500 });
+  }
     
     const payload = Buffer.from(JSON.stringify({ word, gameId })).toString('base64url');
     const signature = createHmac('sha256', privateKey).update(payload).digest('base64url');

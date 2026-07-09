@@ -28,7 +28,7 @@
 ;; 33-byte compressed public key of the off-chain game backend.
 ;; The backend signs { game-id, player-address } to attest that a player won.
 ;; This is the public key for private key '1' (testnet only).
-(define-constant backend-pubkey 0x0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798)
+(define-constant backend-pubkey 0x02f502c5d91c9dc74158406f62ef888ece173e214ac5dfbca1e6937d65f10ff07b)
 
 ;; Entry fee: 0.05 STX = 50 000 microSTX
 ;; Kept intentionally low to encourage broad participation each round.
@@ -244,10 +244,20 @@
     (ok reward)
   )
 )
+;; ---- 3. withdraw-funds ---------------------------------------------------
+;; Admin-only emergency withdrawal.
+;; Allows the contract owner to recover STX from the contract balance.
+;; This exists as a safety valve if the contract needs to be deprecated.
+(define-public (withdraw-funds (amount uint))
+  (begin
+    (asserts! (is-eq tx-sender contract-owner) err-unauthorized)
+    (try! (as-contract (stx-transfer? amount tx-sender contract-owner)))
+    (ok amount)
+  )
+)
 
 
-;; ---------------------------------------------------------------------------
-;; Read-only functions
+
 ;; ---------------------------------------------------------------------------
 
 ;; Checks whether a player has entered a specific game round.

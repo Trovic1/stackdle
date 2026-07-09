@@ -9,6 +9,7 @@ import { WordleBoard } from './components/WordleBoard';
 import { Keyboard } from './components/Keyboard';
 import { WalletButton } from './components/WalletButton';
 import { ResultModal } from './components/ResultModal';
+import { NETWORK } from './lib/contract';
 
 const FloatingTiles = () => {
   const tiles = [
@@ -52,7 +53,7 @@ export default function Home() {
     resetGame, showToast, gameId, token
   } = useWordle();
 
-  const { stxAddress, enterGame, resetTx, isRequestPending, txId } = useStacks();
+  const { stxAddress, enterGame, resetTx, isRequestPending, entryTxId } = useStacks();
   
   const [hasEntered, setHasEntered] = useState(false);
   const [isDark, setIsDark] = useState(true);
@@ -206,16 +207,16 @@ export default function Home() {
                   whileTap={{ scale: 0.98 }}
                   className="w-full py-4 bg-primary hover:bg-orange-600 text-white font-bold rounded-xl shadow-[0_0_20px_rgba(255,85,0,0.3)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   onClick={handleEnterGame}
-                  disabled={isRequestPending || !!txId || !gameId}
+                  disabled={isRequestPending || !!entryTxId || !gameId}
                 >
                   {isRequestPending ? 'Confirming in Wallet...' : 
-                   txId ? 'Transaction Submitted...' : 
+                   entryTxId ? 'Transaction Submitted...' : 
                    !gameId ? 'Loading Game...' : 'Pay & Enter Game'}
                 </motion.button>
 
-                {txId && (
+                {entryTxId && (
                   <div className="mt-4 text-center">
-                    <a href={`https://explorer.hiro.so/txid/${txId}?chain=testnet`} target="_blank" rel="noreferrer" className="text-primary text-sm hover:underline">
+                    <a href={`https://explorer.hiro.so/txid/${entryTxId}?chain=${NETWORK || 'mainnet'}`} target="_blank" rel="noreferrer" className="text-primary text-sm hover:underline">
                       View Transaction
                     </a>
                     <button 

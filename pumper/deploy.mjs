@@ -121,7 +121,7 @@ async function deployContract() {
       try {
         const json = JSON.parse(responseText);
         console.log(`• Transaction ID: ${json.txid || json}`);
-        console.log(`• View on Explorer: https://explorer.hiro.so/txid/${json.txid || json}?chain=testnet`);
+        console.log(`• View on Explorer: https://explorer.hiro.so/txid/${json.txid || json}?chain=${networkStr}`);
       } catch (e) {
         console.log(`• Transaction Response: ${responseText}`);
       }

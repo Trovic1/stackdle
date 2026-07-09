@@ -13,7 +13,11 @@ export async function POST(request: Request) {
     }
 
     // 2. Verify and decode token
-    const privateKey = process.env.BACKEND_PRIVATE_KEY || '0000000000000000000000000000000000000000000000000000000000000001';
+    const privateKey = process.env.BACKEND_PRIVATE_KEY;
+    if (!privateKey) {
+      console.error("FATAL: BACKEND_PRIVATE_KEY is not set in Vercel Environment Variables!");
+      return NextResponse.json({ error: 'Backend configuration error: Private key missing' }, { status: 500 });
+    }
     const [payloadB64, signature] = token.split('.');
     if (!payloadB64 || !signature) {
       return NextResponse.json({ error: 'Invalid token format' }, { status: 400 });
