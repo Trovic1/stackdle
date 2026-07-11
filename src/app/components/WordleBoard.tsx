@@ -12,7 +12,7 @@ export function WordleBoard({ guesses, currentGuess, isShaking }: WordleBoardPro
   const empties = guesses.length < 6 ? Array.from(Array(5 - guesses.length)) : [];
 
   return (
-    <div className="flex flex-col gap-2 w-full max-w-[320px] mx-auto px-2">
+    <div className="flex flex-col gap-1.5 sm:gap-2 w-full max-w-[280px] sm:max-w-[320px] mx-auto px-1 sm:px-2">
       {guesses.map((g, i) => (
         <CompletedRow key={i} guess={g.word} evaluations={g.evaluations} />
       ))}
@@ -45,7 +45,7 @@ function CompletedRow({ guess, evaluations }: { guess: string, evaluations: stri
   };
 
   return (
-    <div className="grid grid-cols-5 gap-2">
+    <div className="grid grid-cols-5 gap-1.5 sm:gap-2">
       {guess.split('').map((char, i) => (
         <motion.div
           key={i}
@@ -53,7 +53,7 @@ function CompletedRow({ guess, evaluations }: { guess: string, evaluations: stri
           initial="initial"
           animate="animate"
           variants={variants}
-          className={`flex items-center justify-center aspect-square text-2xl md:text-3xl font-black uppercase rounded-xl border-2 ${getStyle(evaluations[i])}`}
+          className={`flex items-center justify-center aspect-square text-xl sm:text-2xl md:text-3xl font-black uppercase rounded-lg sm:rounded-xl border-2 ${getStyle(evaluations[i])}`}
           style={{ transformStyle: 'preserve-3d' }}
         >
           {char}
@@ -69,7 +69,7 @@ function CurrentRow({ guess, isShaking }: { guess: string, isShaking: boolean })
 
   return (
     <motion.div 
-      className="grid grid-cols-5 gap-2"
+      className="grid grid-cols-5 gap-1.5 sm:gap-2"
       animate={isShaking ? { x: [-5, 5, -5, 5, 0] } : {}}
       transition={{ duration: 0.4 }}
     >
@@ -79,13 +79,13 @@ function CurrentRow({ guess, isShaking }: { guess: string, isShaking: boolean })
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: [1.1, 1], opacity: 1 }}
           transition={{ type: "spring", stiffness: 300, damping: 20 }}
-          className="flex items-center justify-center aspect-square text-2xl md:text-3xl font-black uppercase rounded-xl border-2 border-muted-foreground bg-white/5 shadow-inner"
+          className="flex items-center justify-center aspect-square text-xl sm:text-2xl md:text-3xl font-black uppercase rounded-lg sm:rounded-xl border-2 border-muted-foreground bg-white/5 shadow-inner"
         >
           {char}
         </motion.div>
       ))}
       {emptyBoxes.map((_, i) => (
-        <div key={i} className="flex items-center justify-center aspect-square rounded-xl border-2 border-white/10 bg-black/10"></div>
+        <div key={i} className="flex items-center justify-center aspect-square rounded-lg sm:rounded-xl border-2 border-white/10 bg-black/10"></div>
       ))}
     </motion.div>
   );
@@ -93,9 +93,9 @@ function CurrentRow({ guess, isShaking }: { guess: string, isShaking: boolean })
 
 function EmptyRow() {
   return (
-    <div className="grid grid-cols-5 gap-2">
+    <div className="grid grid-cols-5 gap-1.5 sm:gap-2">
       {Array.from(Array(5)).map((_, i) => (
-        <div key={i} className="flex items-center justify-center aspect-square rounded-xl border-2 border-white/10 bg-black/10"></div>
+        <div key={i} className="flex items-center justify-center aspect-square rounded-lg sm:rounded-xl border-2 border-white/10 bg-black/10"></div>
       ))}
     </div>
   );

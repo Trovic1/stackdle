@@ -24,7 +24,7 @@ export function Keyboard({ onKeyPress, usedKeys }: KeyboardProps) {
   return (
     <div className="w-full flex flex-col items-center gap-2 touch-manipulation">
       {rows.map((row, i) => (
-        <div key={i} className="flex justify-center gap-1.5 w-full">
+        <div key={i} className="flex justify-center gap-1 sm:gap-1.5 w-full px-1">
           {row.map(key => {
             const isWide = key === 'Enter' || key === 'Backspace';
             
@@ -35,7 +35,7 @@ export function Keyboard({ onKeyPress, usedKeys }: KeyboardProps) {
                 onClick={() => onKeyPress(key)}
                 className={`
                   flex items-center justify-center rounded-lg font-bold uppercase transition-colors
-                  ${isWide ? 'px-3 py-3 text-xs flex-1 max-w-[65px]' : 'w-[8.5%] aspect-[3/4] max-w-[42px] sm:aspect-auto sm:h-14 sm:w-11 text-sm'}
+                  ${isWide ? 'px-2 sm:px-3 py-3 text-[10px] sm:text-xs flex-1 max-w-[65px]' : 'w-[9%] aspect-[2/3] sm:aspect-auto max-w-[42px] sm:h-14 sm:w-11 text-xs sm:text-sm'}
                   ${getKeyStyle(key)}
                 `}
                 aria-label={key}

@@ -9,6 +9,8 @@ import { WordleBoard } from './components/WordleBoard';
 import { Keyboard } from './components/Keyboard';
 import { WalletButton } from './components/WalletButton';
 import { ResultModal } from './components/ResultModal';
+import { LeaderboardModal } from './components/LeaderboardModal';
+import { Trophy } from 'lucide-react';
 import { NETWORK } from './lib/contract';
 
 const FloatingTiles = () => {
@@ -58,6 +60,7 @@ export default function Home() {
   const [hasEntered, setHasEntered] = useState(false);
   const [isDark, setIsDark] = useState(true);
   const [mounted, setMounted] = useState(false);
+  const [isLeaderboardOpen, setIsLeaderboardOpen] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -116,6 +119,12 @@ export default function Home() {
           className="flex items-center gap-4"
         >
           <button 
+            onClick={() => setIsLeaderboardOpen(true)}
+            className="p-2 rounded-full hover:bg-white/10 transition-colors text-yellow-500 hover:text-yellow-400 mr-2"
+          >
+            <Trophy size={20} />
+          </button>
+          <button 
             onClick={toggleTheme} 
             className="p-2 rounded-full hover:bg-white/10 transition-colors text-muted-foreground hover:text-foreground"
           >
@@ -173,7 +182,7 @@ export default function Home() {
           </div>
 
           {/* Window Body */}
-          <div className="p-6 md:p-8 flex flex-col items-center">
+          <div className="p-3 sm:p-6 md:p-8 flex flex-col items-center w-full">
             
             {!stxAddress ? (
               <motion.div 
@@ -284,6 +293,11 @@ export default function Home() {
         }}
         showToast={showToast}
       />
+      <LeaderboardModal 
+        isOpen={isLeaderboardOpen} 
+        onClose={() => setIsLeaderboardOpen(false)} 
+      />
+
     </div>
   );
 }
