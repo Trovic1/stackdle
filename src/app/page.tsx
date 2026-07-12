@@ -109,9 +109,12 @@ export default function Home() {
       <nav className="w-full max-w-7xl mx-auto px-6 py-6 flex justify-between items-center z-50">
         <motion.div 
           initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}
-          className="text-2xl font-black tracking-tighter"
+          className="flex items-center gap-3"
         >
-          STACK<span className="text-primary">DLE</span>
+          <img src="/logo.png" alt="Stackdle Logo" className="w-10 h-10 rounded-[10px] shadow-lg shadow-primary/20" />
+          <span className="text-2xl font-black tracking-tighter hidden sm:block">
+            STACK<span className="text-primary">DLE</span>
+          </span>
         </motion.div>
         
         <motion.div 
